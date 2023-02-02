@@ -1,0 +1,31 @@
+<template>
+  <div>
+    <navbar />
+    <register/>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  name: "RegisterPage",
+});
+</script>
+
+<style>
+
+
+body {
+    background-color: #f7f7f7;
+  }
+
+@media(max-width: 574px) {
+  body {
+    background-color: #fff;
+  }
+#image{
+  display: none;
+}
+}
+</style>
