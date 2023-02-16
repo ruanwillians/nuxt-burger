@@ -7,7 +7,7 @@ export const stateError = () => ({
 })
 
 export const stateAdmin = () => ({
-  admin: '',
+  admin: false,
 })
 
 
@@ -22,6 +22,7 @@ export const getters = {
 export const actions = {
   async login (context, user) {
     context.commit('RemoveError', '')
+    context.commit('RemoveAdmin', false)
     this.$axios
         .post("/login", {
           email: user.email,
@@ -49,6 +50,7 @@ export const actions = {
 
   async register(context, user){
     context.commit('RemoveError', '')
+    context.commit('RemoveAdmin')
     this.$axios
         .post("/users", {
           name: user.name,
@@ -75,11 +77,16 @@ export const actions = {
   logout(context){
     context.commit('RemoveError', '')
     context.commit('RemoveUser')
+    context.commit('RemoveAdmin')
     this.$router.push('/login')
   },
 
   cleanError(context){
     context.commit('RemoveError', '')
+  },
+
+  cleanError(context){
+    context.commit('RemoveAdmin')
   },
 
 }
@@ -106,8 +113,8 @@ export const mutations = {
       state.error =  ''
     },
 
-    RemoveError(state){
-      state.error =  false
+    RemoveAdmin(state){
+      state.admin = false
     }
 
 }
