@@ -1,7 +1,12 @@
 <template>
   <div>
-    <b-container style="display: flex;" id="login" >
-      <b-img class="mt-3" id="image" src="../assets/login.svg" style="min-height: 550px;"></b-img>
+    <b-container style="display: flex" id="login">
+      <b-img
+        class="mt-3"
+        id="image"
+        src="../assets/login.svg"
+        style="min-height: 550px"
+      ></b-img>
       <b-container
         style="
           display: flex;
@@ -12,79 +17,64 @@
         "
         class="mt-3"
       >
-        <b-img src="../assets/logo.svg" style="width: 150px; height: 150px" class="mt-2" />
-        <h2>Registre-se</h2>
+        <b-img
+          src="../assets/logo.svg"
+          style="width: 150px; height: 150px"
+          class="mt-2"
+        />
+        <h3>Registre-se</h3>
 
-        <b-container style="width: 20em;" fluid="sm">
+        <b-container style="width: 20em" fluid="sm">
+          <b-form @submit.prevent="submit">
+            <b-form-group label="Digite seu nome" size="sm" class="mb-1">
+              <b-form-input
+                v-model="user.name"
+                type="text"
+                size="sm"
+                class="mb-1"
+                required
+              ></b-form-input>
+            </b-form-group>
 
-          <b-form>
-             <b-form-group
-            id="fieldset-1"
-            label="Digite seu nome"
-            label-for="input-1"
-             size="sm"
-            class="mb-1"
-          >
-            <b-form-input
-              id="input-1"
-              trim
-              type="text"
-              size="sm"
-              class="mb-1"
-            ></b-form-input>
-          </b-form-group>
+            <b-form-group label="Digite seu email" class="mb-1">
+              <b-form-input
+                v-model="user.email"
+                size="sm"
+                type="email"
+                class="mb-1"
+                required
+              ></b-form-input>
+            </b-form-group>
 
-             <b-form-group
-            id="fieldset-1"
-            label="Digite seu email"
-            label-for="input-1"
-            class="mb-1"
-          >
-            <b-form-input
-              id="input-1"
-              trim
-              size="sm"
-              type="email"
-              class="mb-1"
-            ></b-form-input>
-          </b-form-group>
+            <b-form-group label="Digite sua senha" class="mb-1">
+              <b-form-input
+                v-model="user.password"
+                size="sm"
+                type="password"
+                required
+              ></b-form-input>
+            </b-form-group>
 
-             <b-form-group
-            id="fieldset-1"
-            label="Digite sua senha"
-            label-for="input-1"
-            class="mb-1"
-          >
-            <b-form-input
-              id="input-1"
-              trim
-              size="sm"
-              type="password"
-            ></b-form-input>
-          </b-form-group>
+            <b-form-group label="Confirme sua senha" class="mb-1">
+              <b-form-input
+                v-model="confirmPassword"
+                size="sm"
+                type="password"
+                required
+              ></b-form-input>
+              <p class="mb-1" style="color: red" v-if="error">
+                {{ error }}
+              </p>
+              <p class="mb-1" style="color: red" v-if="passwordError">
+                {{ passwordError }}
+              </p>
+              <p class="mb-1">Já possui cadastro? <a href="/register"> faça login</a></p>
+            </b-form-group>
 
-             <b-form-group
-            id="fieldset-1"
-            label="Confirme sua senha"
-            label-for="input-1"
-            class="mb-2"
-          >
-            <b-form-input
-              id="input-1"
-              trim
-              size="sm"
-              type="password"
-              class="mb-1"
-            ></b-form-input>
-            <p>Já possui cadastro, <a href="/register"> faça login</a></p>
-          </b-form-group>
-
-          <b-button type="submit" variant="success"
-            >Entrar <b-icon icon="arrow-right" class="arrow"
-          /></b-button>
-
+            <b-button type="submit" variant="success"
+              >Entrar <b-icon icon="arrow-right" class="arrow"
+            /></b-button>
           </b-form>
-
         </b-container>
       </b-container>
     </b-container>
@@ -93,9 +83,44 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { mapActions, mapState } from "vuex";
 
 export default Vue.extend({
   name: "Register",
+  data() {
+    return {
+      user: {
+        name: "",
+        email: "",
+        password: "",
+      },
+      confirmPassword: "",
+      passwordError: "",
+    };
+  },
+  methods: {
+    ...mapActions("UserStore", ["register", "cleanError"]),
+    submit() {
+      if (this.user.password.length < 6) {
+        this.cleanError();
+        return (this.passwordError = "A senha devem ter mais de 6 caracteres");
+      } else if (this.confirmPassword != this.user.password) {
+        this.cleanError();
+        return (this.passwordError = "A senha e confirmação devem ser iguais");
+      } else {
+        this.cleanError();
+        this.passwordError = "";
+        this.register(this.user);
+      }
+    },
+  },
+  computed: {
+    ...mapState("UserStore", ["user", "error"]),
+  },
+
+  mounted() {
+    this.cleanError();
+  },
 });
 </script>
 
@@ -105,7 +130,7 @@ export default Vue.extend({
     background-color: #fff;
   }
 
-  #login{
+  #login {
     margin-bottom: 5%;
   }
   #image {

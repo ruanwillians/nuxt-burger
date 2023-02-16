@@ -9,30 +9,15 @@
         img-width="1920"
         img-height="1080"
       >
-        <b-carousel-slide
-          img-src="https://www.almapg.com.br/wp-content/uploads/2019/05/como_fazer_hamburguer_caseiro.jpg"
+        <b-carousel-slide v-for="category in categories[0]" :key="category.id"
+          :img-src="'http://localhost:3333/uploads/'+category.path"
         >
-          <h3>Nossos burgers</h3>
+          <h3>{{ category.name }}</h3>
           <b-button class="my-2 my-sm-" variant="success"
-            >Burgers em promoção</b-button
+            >Acesse {{ category.name }}</b-button
           >
         </b-carousel-slide>
-        <b-carousel-slide
-          img-src="https://kfcbrasil.com.br/wp-content/uploads/2020/08/BANNERS_SITE_coca.png"
-        >
-          <h3>Bebidas nós temos</h3>
-          <b-button class="my-2 my-sm-" variant="success"
-            >Adicione ao seu pedido</b-button
-          ></b-carousel-slide
-        >
-        <b-carousel-slide
-          img-src="https://mytbones.com/wp-content/uploads/2016/04/T-Bones_Kelowna_Fresh_Meal_Market_Sweet_potato_fries-1024x480.jpg"
-        >
-          <h3>Batata rústica!</h3>
-          <b-button class="my-2 my-sm-" variant="success"
-            >Eu Quero</b-button
-          ></b-carousel-slide
-        >
+
       </b-carousel>
     </div>
   </div>
@@ -41,6 +26,23 @@
 <script>
 export default {
   name: "carroussel",
+
+  data(){
+    return {
+      categories: []
+    }
+  },
+
+  mounted(){
+    this.$axios.get('/category')
+    .then((response) => {
+      this.categories.push(response.data)
+      console.log(this.categories)
+    })
+    .catch((err) => {
+      return err
+    })
+  }
 };
 </script>
 

@@ -5,10 +5,7 @@
     <div style="display: flex; justify-content: center;">
       <h1 class="mt-4 mb-3">Promoções</h1>
     </div>
-    <div style="display: flex; justify-content: center; flex-wrap: wrap;">
-       <product/>
-       <product/>
-       <product/>
+    <div>
        <product/>
     </div>
 

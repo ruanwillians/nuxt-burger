@@ -1,9 +1,10 @@
 <template>
-  <div>
-    <b-card-group>
+  <div id="container" style="display:flex; flex-wrap: wrap; justify-content: center;" >
+    <b-card-group v-for="product in products[0]" :key="product.id">
       <b-card
-        title="Card Title"
-        img-src="https://cdn1.parksmedia.wdprapps.disney.com/resize/mwImage/1/1080/1080/75/vision-dam/digital/parks-platform/parks-global-assets/disney-springs/DisneySprings_D-LuxeBurger_FULL_StackBurgerBBQ-1x1.jpg?2022-01-05T21:40:48+00:00"
+        :title="product.name"
+        :img-src="'http://localhost:3333/uploads/'+product.path"
+        :sub-title="'R$:'+product.price"
         img-alt="Image"
         tag="article"
         style="max-width: 17rem"
@@ -18,7 +19,24 @@
 <script>
 export default {
   name: "product",
+
+  data(){
+    return {
+      products: []
+    }
+  },
+
+  mounted(){
+    this.$axios.get('/products')
+    .then((response) => {
+      this.products.push(response.data)
+    })
+    .catch((err) => {
+      return err
+    })
+  }
 };
+
 </script>
 
 <style>
