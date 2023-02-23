@@ -1,15 +1,14 @@
-import { stateUser } from "~/store/UserStore"
 
-export default function ({ $axios }) {
-  $axios.interceptors.request.use(config => {
-    config.headers.Authorization = 'Bearer ' + stateUser.user.token
-    return config
-  }, error => {
-    // Trate erros de solicitação
+export default function ({ $axios, redirect }) {
+
+  $axios.interceptors.response.use((response) => {
+    return response
+  }, (error) => {
+    const status = error.response ? error.response.status : null
+    if (status === 401) {
+      // Redirecione para a página de login se o token de autenticação for inválido ou expirar
+      redirect('/login')
+    }
     return Promise.reject(error)
-  })
-
-  $axios.onError(error => {
-    // Adicione o código que você deseja executar em caso de erro de rede
   })
 }

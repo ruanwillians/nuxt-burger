@@ -28,7 +28,7 @@
           <b-form @submit.prevent="submit">
             <b-form-group label="Digite seu nome" size="sm" class="mb-1">
               <b-form-input
-                v-model="user.name"
+                v-model="userPayload.name"
                 type="text"
                 size="sm"
                 class="mb-1"
@@ -38,7 +38,7 @@
 
             <b-form-group label="Digite seu email" class="mb-1">
               <b-form-input
-                v-model="user.email"
+                v-model="userPayload.email"
                 size="sm"
                 type="email"
                 class="mb-1"
@@ -48,7 +48,7 @@
 
             <b-form-group label="Digite sua senha" class="mb-1">
               <b-form-input
-                v-model="user.password"
+                v-model="userPayload.password"
                 size="sm"
                 type="password"
                 required
@@ -68,7 +68,7 @@
               <p class="mb-1" style="color: red" v-if="passwordError">
                 {{ passwordError }}
               </p>
-              <p class="mb-1">Já possui cadastro? <a href="/register"> faça login</a></p>
+              <p class="mb-1">Já possui cadastro? <a href="/login"> faça login</a></p>
             </b-form-group>
 
             <b-button type="submit" variant="success"
@@ -89,7 +89,7 @@ export default Vue.extend({
   name: "Register",
   data() {
     return {
-      user: {
+      userPayload: {
         name: "",
         email: "",
         password: "",
@@ -101,16 +101,16 @@ export default Vue.extend({
   methods: {
     ...mapActions("UserStore", ["register", "cleanError"]),
     submit() {
-      if (this.user.password.length < 6) {
+      if (this.userPayload.password.length < 6) {
         this.cleanError();
         return (this.passwordError = "A senha devem ter mais de 6 caracteres");
-      } else if (this.confirmPassword != this.user.password) {
+      } else if (this.confirmPassword != this.userPayload.password) {
         this.cleanError();
         return (this.passwordError = "A senha e confirmação devem ser iguais");
       } else {
         this.cleanError();
         this.passwordError = "";
-        this.register(this.user);
+        this.register(this.userPayload);
       }
     },
   },

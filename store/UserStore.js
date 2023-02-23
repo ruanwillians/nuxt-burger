@@ -1,28 +1,19 @@
-export const stateUser = () => ({
+export const state = () => ({
   user: '',
-})
-
-export const stateError = () => ({
+  token: '',
   error: '',
-})
-
-export const stateAdmin = () => ({
   admin: false,
 })
 
-
-
 export const getters = {
-  user(state){
-    return state.user
-  },
-
+  token(state){
+    return state.token
+  }
 }
 
 export const actions = {
   async login (context, user) {
     context.commit('RemoveError', '')
-    context.commit('RemoveAdmin', false)
     this.$axios
         .post("/login", {
           email: user.email,
@@ -32,7 +23,8 @@ export const actions = {
           context.commit('SetUser', res.data)
           if(res.data.admin === true){
             context.commit('SetAdmin', true)
-            this.$router.push('/dashboard')
+            localStorage.setItem('token', res.data.token.token)
+            this.$router.push('/dashboard/orders')
           } else {
            this.$router.push('/')
           }
@@ -50,7 +42,6 @@ export const actions = {
 
   async register(context, user){
     context.commit('RemoveError', '')
-    context.commit('RemoveAdmin')
     this.$axios
         .post("/users", {
           name: user.name,
@@ -60,7 +51,6 @@ export const actions = {
         })
         .then((res) => {
           this.$router.push('/login')
-
         })
         .catch((err)=> {
           if(err.message === "Request failed with status code 422"){
@@ -85,16 +75,14 @@ export const actions = {
     context.commit('RemoveError', '')
   },
 
-  cleanError(context){
-    context.commit('RemoveAdmin')
-  },
-
 }
 
 export const mutations = {
     SetUser(state, user) {
-      state.user = user
+      state.user = user.username
+      state.token = user.token.token
     },
+
     SetError(state, err){
       state.error= err
     },
@@ -105,8 +93,7 @@ export const mutations = {
 
     RemoveUser(state){
       state.user = ''
-      state.token= ''
-      state.error = ''
+      state.token = ''
     },
 
     RemoveError(state){
@@ -118,5 +105,3 @@ export const mutations = {
     }
 
 }
-
-

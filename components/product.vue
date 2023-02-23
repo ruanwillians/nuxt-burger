@@ -3,7 +3,7 @@
     <b-card-group v-for="product in products[0]" :key="product.id">
       <b-card
         :title="product.name"
-        :img-src="'http://localhost:3333/uploads/'+product.path"
+        :img-src="'https://burger-production.up.railway.app/uploads/'+product.path"
         :sub-title="'R$:'+product.price"
         img-alt="Image"
         tag="article"

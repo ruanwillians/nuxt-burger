@@ -10,7 +10,7 @@
         img-height="1080"
       >
         <b-carousel-slide v-for="category in categories[0]" :key="category.id"
-          :img-src="'http://localhost:3333/uploads/'+category.path"
+          :img-src="'https://burger-production.up.railway.app/uploads/'+category.path"
         >
           <h3>{{ category.name }}</h3>
           <b-button class="my-2 my-sm-" variant="success"

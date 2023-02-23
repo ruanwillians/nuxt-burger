@@ -5,7 +5,7 @@
     </b-navbar-brand>
 
     <div style="display: flex; align-items: center;">
-      <h6 v-if="user" class="mt-2 mr-2" style="color: #fff" >Olá {{user.username}}</h6>
+      <h6 v-if="token" class="mt-2 mr-2" style="color: #fff" >Olá {{user}}</h6>
       <b-navbar-toggle target="navbar-toggle-collapse">
         <template #default="{ expanded }">
           <b-icon v-if="expanded" icon="chevron-bar-up"></b-icon>
@@ -23,12 +23,12 @@
     <b-collapse id="navbar-toggle-collapse" is-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item href="/">Home</b-nav-item>
-        <div v-if="user">
+        <div v-if="token">
           <div v-if="admin === false">
              <b-nav-item  href="">Meu perfil</b-nav-item>
           </div>
           <div v-else>
-             <b-nav-item  href="">Dashboard</b-nav-item>
+             <b-nav-item  href="/dashboard/orders">Dashboard</b-nav-item>
           </div>
 
           <b-nav-item @click="logout" href="/login">Sair</b-nav-item>
@@ -62,8 +62,7 @@ export default {
   },
 
   computed: {
-    ...mapState('UserStore', ['user', 'admin']),
-    ...mapGetters('UserStore', ['token'])
+    ...mapState('UserStore', ['user', 'admin', 'token']),
   },
 };
 </script>
